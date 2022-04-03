@@ -8,6 +8,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
   "categoryId": 2
 }
 ###
+POST http://localhost:8080/task
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTUyNzMxLCJleHAiOjE2ODA1MDk2ODN9.km9_L13O4t97-ZRX3B4TFXssr8HBz0NnJ3R2bHzmzJA
+
+{
+  "title": "",
+  "description": ""
+}
+###
+PUT http://localhost:8080/task/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTUyNzMxLCJleHAiOjE2ODA1MDk2ODN9.km9_L13O4t97-ZRX3B4TFXssr8HBz0NnJ3R2bHzmzJA
+
+{
+  "title": "777",
+  "description": "123", 
+  "categoryId": 2
+}
+###
 PUT http://localhost:8080/task/2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTUyNzMxLCJleHAiOjE2ODA1MDk2ODN9.km9_L13O4t97-ZRX3B4TFXssr8HBz0NnJ3R2bHzmzJA
