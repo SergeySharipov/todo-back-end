@@ -1,5 +1,5 @@
-import verifyToken from "./verifyToken";
-import requestLogger from "./requestLogger";
+import verifyToken from './verifyToken'
+import requestLogger from './requestLogger'
 
 export {
   verifyToken,

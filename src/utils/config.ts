@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 const PORT = process.env.PORT!
 
 const DATABASE_URL = process.env.DATABASE_URL!
