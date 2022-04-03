@@ -1,0 +1,25 @@
+POST http://localhost:8080/task
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTI5NzAxLCJleHAiOjE2ODA0ODY2NTN9.9tp1sbIyfC4Fy42dyOoI3H33VVmBEFevgmD6Ee4wupk
+
+{
+  "title": "111",
+  "description": "222"
+}
+###
+PUT http://localhost:8080/task/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTI5NzAxLCJleHAiOjE2ODA0ODY2NTN9.9tp1sbIyfC4Fy42dyOoI3H33VVmBEFevgmD6Ee4wupk
+
+{
+  "title": "777",
+  "description": "123"
+}
+###
+GET http://localhost:8080/task
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTI5NzAxLCJleHAiOjE2ODA0ODY2NTN9.9tp1sbIyfC4Fy42dyOoI3H33VVmBEFevgmD6Ee4wupk
+###
+DELETE http://localhost:8080/task/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTI5NzAxLCJleHAiOjE2ODA0ODY2NTN9.9tp1sbIyfC4Fy42dyOoI3H33VVmBEFevgmD6Ee4wupk

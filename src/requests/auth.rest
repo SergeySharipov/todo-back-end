@@ -1,0 +1,59 @@
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "password": "secret2022",
+  "username": "TEST",
+  "email": "TEST@c.com"
+}
+###
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "password": "secret2022",
+  "username": "",
+  "email": "TEST@c.com"
+}
+###
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "password": "",
+  "username": "TEST",
+  "email": "TEST@c.com"
+}
+###
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "password": "secret2022",
+  "username": "TEST",
+  "email": ""
+}
+###
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "password": "secret2022",
+  "email": "TEST@c.com"
+}
+###
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "password": "wrong",
+  "email": "TEST@c.com"
+}
+###
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "password": "wrong",
+  "email": "wrong"
+}
