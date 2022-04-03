@@ -13,9 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(requestLogger)
 
-app.use(routes.authRoutes)
-app.use(routes.taskRoutes)
-app.use(routes.categoryRoutes)
+app.use(routes)
 
 const start = async () => {
   await connectToDatabase()

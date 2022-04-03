@@ -1,8 +1,13 @@
+import { Router } from 'express'
+import { verifyToken } from '../middlewares'
+import taskRouter from './task.router'
+import categoryRouter from './category.router'
+import authRouter from './auth.router'
 
-import taskRoutes from './task.routes'
-import categoryRoutes from './category.routes'
-import authRoutes from './auth.routes'
+const router: Router = Router()
 
-const routes = { authRoutes, taskRoutes, categoryRoutes }
+router.use('/auth', authRouter)
+router.use('/task', [verifyToken], taskRouter)
+router.use('/category', [verifyToken], categoryRouter)
 
-export default routes
+export default router
