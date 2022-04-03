@@ -1,17 +1,35 @@
 import { Response, Request } from 'express'
 import { Category, User } from '../models'
-import { ICategoryCreation } from '../types/global'
+import zod from 'zod'
+
+const updateCategoryValidation = zod.object({
+  id: zod.number({
+    required_error: 'id can\'t be empty',
+    invalid_type_error: 'id must be a number'
+  }),
+  userId: zod.number({
+    required_error: 'userId can\'t be empty',
+    invalid_type_error: 'userId must be a number'
+  }),
+  title: zod.string({
+    required_error: 'title can\'t be empty',
+    invalid_type_error: 'title must be a string'
+  }).min(1, { message: 'title can\'t be empty' })
+})
+
+const addCategoryValidation = updateCategoryValidation.omit({ id: true })
 
 const addCategory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const category = req.body as ICategoryCreation
-
     const user = await User.findByPk(req.userId)
 
     if (user) {
-      category.userId = user.id
+      const validCategory = addCategoryValidation.parse({
+        ...req.body,
+        userId: user.id
+      })
 
-      const newCategory = await Category.create(category)
+      const newCategory = await Category.create(validCategory)
 
       res.status(201).json({
         message: 'Category added.',
@@ -20,19 +38,30 @@ const addCategory = async (req: Request, res: Response): Promise<void> => {
     } else {
       res.status(500).send({ message: 'User not found.' })
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Error: ' + error })
+  } catch (err: unknown) {
+    if (err instanceof zod.ZodError) {
+      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+    } else {
+      res.status(500).send({ message: 'Error: ' + err })
+    }
   }
 }
 
 const updateCategory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const category = req.body as ICategoryCreation
-
     const user = await User.findByPk(req.userId)
+    const categoryId = Number(req.params.id)
 
     if (user) {
-      const updatedCategory = await Category.update(category, { where: { id: req.params.id, userId: user.id } })
+      const validCategory = updateCategoryValidation.parse({
+        ...req.body,
+        userId: user.id,
+        id: categoryId
+      })
+
+      const updatedCategory = await Category.update(validCategory, {
+        where: { id: validCategory.id, userId: validCategory.userId }
+      })
 
       res.status(201).json({
         message: 'Category updated.',
@@ -41,19 +70,24 @@ const updateCategory = async (req: Request, res: Response): Promise<void> => {
     } else {
       res.status(500).send({ message: 'User not found.' })
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Error: ' + error })
+  } catch (err: unknown) {
+    if (err instanceof zod.ZodError) {
+      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+    } else {
+      res.status(500).send({ message: 'Error: ' + err })
+    }
   }
 }
 
 const deleteCategory = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findByPk(req.userId)
+    const categoryId = Number(req.params.id)
 
     if (user) {
       const numberOfDeletedCategorys = await Category.destroy({
         where: {
-          id: req.params.id,
+          id: categoryId,
           userId: user.id
         }
       })

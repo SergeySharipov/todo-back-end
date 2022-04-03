@@ -14,6 +14,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxN
   "title": "777"
 }
 ###
+PUT http://localhost:8080/category/string
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTU0MjM0LCJleHAiOjE2ODA1MTExODZ9.DIa1npNXprm8DrUU_QoA8HPijNgIMwNizsARlwx4hkE
+###
 GET http://localhost:8080/category
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTU0MjM0LCJleHAiOjE2ODA1MTExODZ9.DIa1npNXprm8DrUU_QoA8HPijNgIMwNizsARlwx4hkE
