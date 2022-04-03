@@ -3,32 +3,69 @@ import { AUTH_SECRET } from '../utils/config'
 import { User } from '../models/'
 import Jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import zod from 'zod'
+import * as Sequelize from 'sequelize'
+
+const signupUserValidation = zod.object({
+  username: zod.string({
+    required_error: 'username can\'t be empty',
+    invalid_type_error: 'username must be a string'
+  }).min(1, { message: 'username can\'t be empty' }),
+  email: zod.string({
+    required_error: 'email can\'t be empty',
+    invalid_type_error: 'email must be a string'
+  }).email({ message: 'email is invalid' }),
+  password: zod.string({
+    required_error: 'password can\'t be empty',
+    invalid_type_error: 'password must be a string'
+  }).min(6, { message: 'password must be 6 or more characters long' })
+})
+
+const signinUserValidation = signupUserValidation.omit({ username: true })
+
+const generateToken = (userId: number) => {
+  return Jwt.sign({ id: userId }, AUTH_SECRET, {
+    expiresIn: 31556952 // 1 year
+  })
+}
 
 const signup = async (req: Request, res: Response) => {
   try {
+    const validUser = signupUserValidation.parse(req.body)
+
     const user = await User.create({
-      username: req.body.username,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8)
+      ...validUser,
+      password: bcrypt.hashSync(validUser.password, 8)
     })
 
     if (!user) {
       return res.status(500).send({ message: 'User was not registered.' })
     }
 
-    return res.send({ message: 'User was registered successfully!' })
-  } catch (error) {
-    return res.status(500).send({ message: 'User was not registered. ' + error })
+    const token = generateToken(user.id)
+
+    return res.status(200).send({
+      message: 'User was registered successfully!',
+      accessToken: token
+    })
+  } catch (err: unknown) {
+    if (err instanceof zod.ZodError) {
+      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+    } else if (err instanceof Sequelize.UniqueConstraintError) {
+      res.status(500).send({ message: 'Email is already registered.' })
+    } else {
+      res.status(500).send({ message: 'User was not registered. Error: ' + err })
+    }
   }
 }
 
 const signin = async (req: Request, res: Response) => {
   try {
-    const body = req.body
+    const validUser = signinUserValidation.parse(req.body)
 
     const user = await User.findOne({
       where: {
-        email: body.email
+        email: validUser.email
       }
     })
 
@@ -37,7 +74,7 @@ const signin = async (req: Request, res: Response) => {
     }
 
     const passwordIsValid = bcrypt.compareSync(
-      req.body.password,
+      validUser.password,
       user.password
     )
 
@@ -47,18 +84,17 @@ const signin = async (req: Request, res: Response) => {
       })
     }
 
-    const token = Jwt.sign({ id: user.id }, AUTH_SECRET, {
-      expiresIn: 31556952 // 1 year
-    })
+    const token = generateToken(user.id)
 
-    res.status(200).send({
-      id: user.id,
-      username: user.username,
-      email: user.email,
+    return res.status(200).send({
       accessToken: token
     })
-  } catch (error) {
-    return res.status(404).send({ message: 'User Not found.' })
+  } catch (err: unknown) {
+    if (err instanceof zod.ZodError) {
+      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+    } else {
+      res.status(500).send({ message: 'Error: ' + err })
+    }
   }
 }
 

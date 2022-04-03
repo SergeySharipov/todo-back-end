@@ -29,6 +29,15 @@ POST http://localhost:8080/auth/signup
 Content-Type: application/json
 
 {
+  "password": "",
+  "username": "",
+  "email": ""
+}
+###
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
   "password": "secret2022",
   "username": "TEST",
   "email": ""
@@ -46,7 +55,7 @@ POST http://localhost:8080/auth/signin
 Content-Type: application/json
 
 {
-  "password": "wrong",
+  "password": "wrongpass",
   "email": "TEST@c.com"
 }
 ###
@@ -54,6 +63,6 @@ POST http://localhost:8080/auth/signin
 Content-Type: application/json
 
 {
-  "password": "wrong",
-  "email": "wrong"
+  "password": "wrongpass",
+  "email": "wrong@m.com"
 }
