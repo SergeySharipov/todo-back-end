@@ -1,21 +1,21 @@
 import { Response, Request } from 'express'
-import { Task, User } from '../models/'
-import { ITaskCreation } from '../types/global'
+import { Category, User } from '../models'
+import { ICategoryCreation } from '../types/global'
 
-const addTask = async (req: Request, res: Response): Promise<void> => {
+const addCategory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const task = req.body as ITaskCreation
+    const category = req.body as ICategoryCreation
 
     const user = await User.findByPk(req.userId)
 
     if (user) {
-      task.userId = user.id
+      category.userId = user.id
 
-      const newTask = await Task.create(task)
+      const newCategory = await Category.create(category)
 
       res.status(201).json({
-        message: 'Task added.',
-        task: newTask
+        message: 'Category added.',
+        category: newCategory
       })
     } else {
       res.status(500).send({ message: 'User not found.' })
@@ -25,18 +25,18 @@ const addTask = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const updateTask = async (req: Request, res: Response): Promise<void> => {
+const updateCategory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const task = req.body as ITaskCreation
+    const category = req.body as ICategoryCreation
 
     const user = await User.findByPk(req.userId)
 
     if (user) {
-      const updatedTask = await Task.update(task, { where: { id: req.params.id, userId: user.id } })
+      const updatedCategory = await Category.update(category, { where: { id: req.params.id, userId: user.id } })
 
       res.status(201).json({
-        message: 'Task updated.',
-        task: updatedTask
+        message: 'Category updated.',
+        category: updatedCategory
       })
     } else {
       res.status(500).send({ message: 'User not found.' })
@@ -46,12 +46,12 @@ const updateTask = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const deleteTask = async (req: Request, res: Response): Promise<void> => {
+const deleteCategory = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findByPk(req.userId)
 
     if (user) {
-      const numberOfDeletedTasks = await Task.destroy({
+      const numberOfDeletedCategorys = await Category.destroy({
         where: {
           id: req.params.id,
           userId: user.id
@@ -59,8 +59,8 @@ const deleteTask = async (req: Request, res: Response): Promise<void> => {
       })
 
       res.status(200).json({
-        message: 'Task deleted',
-        numberOfDeletedTasks: numberOfDeletedTasks
+        message: 'Category deleted',
+        numberOfDeletedCategorys: numberOfDeletedCategorys
       })
     } else {
       res.status(500).send({ message: 'User not found.' })
@@ -70,22 +70,21 @@ const deleteTask = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const getTasks = async (req: Request, res: Response): Promise<void> => {
+const getCategories = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await User.findByPk(req.userId)
     if (user) {
-      const tasks = await Task.findAll({
+      const categories = await Category.findAll({
         where: {
           userId: user.id
         },
         order: [
-          ['status', 'ASC'],
           ['updatedAt', 'DESC'],
           ['createdAt', 'DESC']
         ]
       })
 
-      res.status(200).json({ tasks })
+      res.status(200).json({ categories })
     } else {
       res.status(500).send({ message: 'User not found.' })
     }
@@ -94,6 +93,6 @@ const getTasks = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const controller = { getTasks, addTask, updateTask, deleteTask }
+const controller = { getCategories, addCategory, updateCategory, deleteCategory }
 
 export default controller

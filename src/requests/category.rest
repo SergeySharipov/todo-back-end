@@ -1,0 +1,23 @@
+POST http://localhost:8080/category
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTU0MjM0LCJleHAiOjE2ODA1MTExODZ9.DIa1npNXprm8DrUU_QoA8HPijNgIMwNizsARlwx4hkE
+
+{
+  "title": "111"
+}
+###
+PUT http://localhost:8080/category/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTU0MjM0LCJleHAiOjE2ODA1MTExODZ9.DIa1npNXprm8DrUU_QoA8HPijNgIMwNizsARlwx4hkE
+
+{
+  "title": "777"
+}
+###
+GET http://localhost:8080/category
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTU0MjM0LCJleHAiOjE2ODA1MTExODZ9.DIa1npNXprm8DrUU_QoA8HPijNgIMwNizsARlwx4hkE
+###
+DELETE http://localhost:8080/category/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ4OTU0MjM0LCJleHAiOjE2ODA1MTExODZ9.DIa1npNXprm8DrUU_QoA8HPijNgIMwNizsARlwx4hkE

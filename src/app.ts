@@ -15,6 +15,7 @@ app.use(requestLogger)
 
 app.use(routes.authRoutes)
 app.use(routes.taskRoutes)
+app.use(routes.categoryRoutes)
 
 const start = async () => {
   await connectToDatabase()

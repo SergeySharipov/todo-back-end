@@ -10,9 +10,9 @@ class User extends Model<
   declare email: string
   declare password: string
   // createdAt can be undefined during creation
-  declare createdAt: CreationOptional<Date>;
+  declare createdAt: CreationOptional<Date>
   // updatedAt can be undefined during creation
-  declare updatedAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>
 }
 
 export default User.init(
@@ -39,7 +39,7 @@ export default User.init(
     updatedAt: DataTypes.DATE
   },
   {
-    modelName: 'task',
+    modelName: 'user',
     tableName: 'users',
     underscored: true,
     timestamps: true,
