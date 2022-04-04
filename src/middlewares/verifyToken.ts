@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { AUTH_SECRET } from '../utils/config'
+import status from '../constants/status.constants'
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   const bearerHeader = req.headers.authorization
@@ -19,7 +20,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
 
   jwt.verify(token, AUTH_SECRET, (err, decoded) => {
     if (err || !decoded || typeof decoded === 'string') {
-      return res.status(401).send({ message: 'Unauthorized!' })
+      return res.status(status.UNAUTHORIZED).send({ message: 'Unauthorized!' })
     }
 
     req.userId = decoded.id

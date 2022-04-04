@@ -1,6 +1,7 @@
 import { Response, Request } from 'express'
 import { Task, User } from '../models/'
 import zod from 'zod'
+import status from '../constants/status.constants'
 
 const updateTaskValidation = zod.object({
   id: zod.number({
@@ -46,13 +47,13 @@ const addTask = async (req: Request, res: Response) => {
         task: newTask
       })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      return res.status(500).send({ message: 'Error: ' + err })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
     }
   }
 }
@@ -78,13 +79,13 @@ const updateTask = async (req: Request, res: Response) => {
         task: updatedTask
       })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      return res.status(500).send({ message: 'Error: ' + err })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
     }
   }
 }
@@ -102,15 +103,15 @@ const deleteTask = async (req: Request, res: Response) => {
         }
       })
 
-      return res.status(200).json({
+      return res.status(status.OK).json({
         message: 'Task deleted',
         numberOfDeletedTasks: numberOfDeletedTasks
       })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err) {
-    return res.status(500).send({ message: 'Error: ' + err })
+    return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
   }
 }
 
@@ -130,12 +131,12 @@ const getTasks = async (req: Request, res: Response) => {
         ]
       })
 
-      return res.status(200).json({ tasks })
+      return res.status(status.OK).json({ tasks })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err) {
-    return res.status(500).send({ message: 'Error: ' + err })
+    return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
   }
 }
 

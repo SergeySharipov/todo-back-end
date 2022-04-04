@@ -5,6 +5,7 @@ import Jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import zod from 'zod'
 import * as Sequelize from 'sequelize'
+import status from '../constants/status.constants'
 
 const signupUserValidation = zod.object({
   username: zod.string({
@@ -39,22 +40,22 @@ const signup = async (req: Request, res: Response) => {
     })
 
     if (!user) {
-      return res.status(500).send({ message: 'User was not registered.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User was not registered.' })
     }
 
     const token = generateToken(user.id)
 
-    return res.status(200).send({
+    return res.status(status.OK).send({
       message: 'User was registered successfully!',
       accessToken: token
     })
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else if (err instanceof Sequelize.UniqueConstraintError) {
-      res.status(500).send({ message: 'Email is already registered.' })
+      res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Email is already registered.' })
     } else {
-      res.status(500).send({ message: 'User was not registered. Error: ' + err })
+      res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User was not registered. Error: ' + err })
     }
   }
 }
@@ -70,7 +71,7 @@ const signin = async (req: Request, res: Response) => {
     })
 
     if (!user) {
-      return res.status(404).send({ message: 'User Not found.' })
+      return res.status(status.NOT_FOUND).send({ message: 'User Not found.' })
     }
 
     const passwordIsValid = bcrypt.compareSync(
@@ -79,21 +80,21 @@ const signin = async (req: Request, res: Response) => {
     )
 
     if (!passwordIsValid) {
-      return res.status(401).send({
+      return res.status(status.UNAUTHORIZED).send({
         message: 'Invalid Password!'
       })
     }
 
     const token = generateToken(user.id)
 
-    return res.status(200).send({
+    return res.status(status.OK).send({
       accessToken: token
     })
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      res.status(500).send({ message: 'Error: ' + err })
+      res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
     }
   }
 }

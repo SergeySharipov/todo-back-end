@@ -1,6 +1,7 @@
 import { Response, Request } from 'express'
 import { Category, User } from '../models'
 import zod from 'zod'
+import status from '../constants/status.constants'
 
 const updateCategoryValidation = zod.object({
   id: zod.number({
@@ -36,13 +37,13 @@ const addCategory = async (req: Request, res: Response) => {
         category: newCategory
       })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      return res.status(500).send({ message: 'Error: ' + err })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
     }
   }
 }
@@ -68,13 +69,13 @@ const updateCategory = async (req: Request, res: Response) => {
         category: updatedCategory
       })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      return res.status(500).send({ message: 'Error: ' + err })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
     }
   }
 }
@@ -92,15 +93,15 @@ const deleteCategory = async (req: Request, res: Response) => {
         }
       })
 
-      return res.status(200).json({
+      return res.status(status.OK).json({
         message: 'Category deleted',
         numberOfDeletedCategorys: numberOfDeletedCategorys
       })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err) {
-    return res.status(500).send({ message: 'Error: ' + err })
+    return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
   }
 }
 
@@ -118,12 +119,12 @@ const getCategories = async (req: Request, res: Response) => {
         ]
       })
 
-      return res.status(200).json({ categories })
+      return res.status(status.OK).json({ categories })
     } else {
-      return res.status(500).send({ message: 'User not found.' })
+      return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'User not found.' })
     }
   } catch (err) {
-    return res.status(500).send({ message: 'Error: ' + err })
+    return res.status(status.INTERNAL_SERVER_ERROR).send({ message: 'Error: ' + err })
   }
 }
 
