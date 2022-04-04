@@ -19,7 +19,7 @@ const updateCategoryValidation = zod.object({
 
 const addCategoryValidation = updateCategoryValidation.omit({ id: true })
 
-const addCategory = async (req: Request, res: Response): Promise<void> => {
+const addCategory = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
 
@@ -31,23 +31,23 @@ const addCategory = async (req: Request, res: Response): Promise<void> => {
 
       const newCategory = await Category.create(validCategory)
 
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Category added.',
         category: newCategory
       })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      res.status(500).send({ message: 'Error: ' + err })
+      return res.status(500).send({ message: 'Error: ' + err })
     }
   }
 }
 
-const updateCategory = async (req: Request, res: Response): Promise<void> => {
+const updateCategory = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
     const categoryId = Number(req.params.id)
@@ -63,23 +63,23 @@ const updateCategory = async (req: Request, res: Response): Promise<void> => {
         where: { id: validCategory.id, userId: validCategory.userId }
       })
 
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Category updated.',
         category: updatedCategory
       })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      res.status(500).send({ message: 'Error: ' + err })
+      return res.status(500).send({ message: 'Error: ' + err })
     }
   }
 }
 
-const deleteCategory = async (req: Request, res: Response): Promise<void> => {
+const deleteCategory = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
     const categoryId = Number(req.params.id)
@@ -92,19 +92,19 @@ const deleteCategory = async (req: Request, res: Response): Promise<void> => {
         }
       })
 
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Category deleted',
         numberOfDeletedCategorys: numberOfDeletedCategorys
       })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Error: ' + error })
+  } catch (err) {
+    return res.status(500).send({ message: 'Error: ' + err })
   }
 }
 
-const getCategories = async (req: Request, res: Response): Promise<void> => {
+const getCategories = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
     if (user) {
@@ -118,12 +118,12 @@ const getCategories = async (req: Request, res: Response): Promise<void> => {
         ]
       })
 
-      res.status(200).json({ categories })
+      return res.status(200).json({ categories })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Error: ' + error })
+  } catch (err) {
+    return res.status(500).send({ message: 'Error: ' + err })
   }
 }
 
