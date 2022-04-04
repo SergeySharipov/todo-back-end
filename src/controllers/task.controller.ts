@@ -29,7 +29,7 @@ const updateTaskValidation = zod.object({
 
 const addTaskValidation = updateTaskValidation.omit({ id: true })
 
-const addTask = async (req: Request, res: Response): Promise<void> => {
+const addTask = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
 
@@ -41,23 +41,23 @@ const addTask = async (req: Request, res: Response): Promise<void> => {
 
       const newTask = await Task.create(validTask)
 
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Task added.',
         task: newTask
       })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      res.status(500).send({ message: 'Error: ' + err })
+      return res.status(500).send({ message: 'Error: ' + err })
     }
   }
 }
 
-const updateTask = async (req: Request, res: Response): Promise<void> => {
+const updateTask = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
     const taskId = Number(req.params.id)
@@ -73,23 +73,23 @@ const updateTask = async (req: Request, res: Response): Promise<void> => {
         where: { id: validTask.id, userId: validTask.userId }
       })
 
-      res.status(201).json({
+      return res.status(201).json({
         message: 'Task updated.',
         task: updatedTask
       })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
   } catch (err: unknown) {
     if (err instanceof zod.ZodError) {
-      res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
+      return res.status(500).send({ message: 'Error: ' + err.errors.map(m => m.message) })
     } else {
-      res.status(500).send({ message: 'Error: ' + err })
+      return res.status(500).send({ message: 'Error: ' + err })
     }
   }
 }
 
-const deleteTask = async (req: Request, res: Response): Promise<void> => {
+const deleteTask = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
     const taskId = Number(req.params.id)
@@ -102,19 +102,19 @@ const deleteTask = async (req: Request, res: Response): Promise<void> => {
         }
       })
 
-      res.status(200).json({
+      return res.status(200).json({
         message: 'Task deleted',
         numberOfDeletedTasks: numberOfDeletedTasks
       })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Error: ' + error })
+  } catch (err) {
+    return res.status(500).send({ message: 'Error: ' + err })
   }
 }
 
-const getTasks = async (req: Request, res: Response): Promise<void> => {
+const getTasks = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.userId)
 
@@ -130,12 +130,12 @@ const getTasks = async (req: Request, res: Response): Promise<void> => {
         ]
       })
 
-      res.status(200).json({ tasks })
+      return res.status(200).json({ tasks })
     } else {
-      res.status(500).send({ message: 'User not found.' })
+      return res.status(500).send({ message: 'User not found.' })
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Error: ' + error })
+  } catch (err) {
+    return res.status(500).send({ message: 'Error: ' + err })
   }
 }
 
